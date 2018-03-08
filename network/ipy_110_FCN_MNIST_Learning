@@ -16,17 +16,28 @@ def save_params(self, file_name="weight_sklee.pkl"):
 
 
 # 데이터 읽기
+# normalize, 0 ~ 255 convert to 0 ~ 1
+# one_hot_label, only one array index of input_data is 1, the others 0 ex) number learning
+# x_train & x_test, input_data
+# t_train & t_test, input_data_label
 (x_train, t_train), (x_test, t_test) = load_mnist(normalize=True, one_hot_label=True)
 
 print(type(x_train), x_train.shape)
 print(t_train[0])
 print(type(t_train), t_train.shape)
 
+
+# input_size, 28x28, 784
+# hidden_size, the number of hidden numbers is 50
+# output_size, 0 ~ 9
 network = TwoLayerNet(input_size=784, hidden_size=50, output_size=10)
 
+# iters_num, repetition on the whole
+# train_size, the number of input_data
 iters_num = 10000
 train_size = x_train.shape[0]
 # print('x_train.shape',x_train.shape)
+
 # batch_size = input_data Sampling
 batch_size = 100
 learning_rate = 0.1
@@ -35,8 +46,14 @@ train_loss_list = []
 train_acc_list = []
 test_acc_list = []
 
+# the number of epoch * (mini)batch_size = the number of repetition on the whole once.
+# total epoch for whole learning is (iteration * (mini)batch_size) / input_data_number
 iter_per_epoch = max(train_size / batch_size, 1)
 
+
+# np.random.choice(train_size, batch_size), not except
+# example, input_data 100, minibatch 10 -> 10 of (100-10) is not
+# only 10 of 100, 10 of 100, 10 of 100....
 curr_epoch = 0
 for i in range(iters_num):
     batch_mask = np.random.choice(train_size, batch_size)
@@ -45,11 +62,14 @@ for i in range(iters_num):
     t_batch = t_train[batch_mask]
 #     print('t_batch = ',t_batch)
     
-    # 기울기 계산
+# 기울기 계산
     #grad = network.numerical_gradient(x_batch, t_batch) # 수치 미분 방식
     grad = network.gradient(x_batch, t_batch) # 오차역전파법 방식(훨씬 빠르다)
 #     print('grad = ',grad)
-    # 갱신
+
+# 2 layer weight & bias
+# renew each weight & bias
+# 갱신!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
     for key in ('W1', 'b1', 'W2', 'b2'):
         network.params[key] -= learning_rate * grad[key]
 
