@@ -69,7 +69,8 @@ for i in range(iters_num):
 
 # 2 layer weight & bias
 # renew each weight & bias
-# 갱신!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+# W = W - delta(error)/delta(W)
+# all parameters are renewed by SGD(Stochastic Gradient Descent)
     for key in ('W1', 'b1', 'W2', 'b2'):
         network.params[key] -= learning_rate * grad[key]
 
