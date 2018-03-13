@@ -33,9 +33,17 @@ def numerical_gradient_2d(f, X):
 
 def numerical_gradient(f, x):
     h = 1e-4 # 0.0001
+    
+    # np.zeros_like, all elements are 0 & it's shape is equal to x's shape
     grad = np.zeros_like(x)
     
+    # np.nditer, Efficient multi-dimensional iterator object to iterate over arrays.
+    # flags, sequence of str, optional
+    # op_flags, list of list of str, optional
+    # 'multi_index', a multi-index, or a tuple of indices with one per iteration dimension, to be tracked.
+    # 
     it = np.nditer(x, flags=['multi_index'], op_flags=['readwrite'])
+    
     while not it.finished:
         idx = it.multi_index
         tmp_val = x[idx]
