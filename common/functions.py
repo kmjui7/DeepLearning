@@ -31,7 +31,10 @@ def relu_grad(x):
 def softmax(x):
     if x.ndim == 2:
         x = x.T
+        # x -= x.max(x.row)
         x = x - np.max(x, axis=0)
+        
+        # start!!!
         y = np.exp(x) / np.sum(np.exp(x), axis=0)
         return y.T 
 
