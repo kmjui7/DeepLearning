@@ -38,6 +38,8 @@ class Sigmoid:
 
 
 class Affine:
+    # FCN(Fully Connected Network)
+    
     def __init__(self, W, b):
         self.W = W
         self.b = b
@@ -50,18 +52,30 @@ class Affine:
 
     def forward(self, x):
         # 텐서 대응
+        # x, input_data, x.shape = (batch_size, input_data_size(28x28))
+        # self.original_x_shape, is used to backward.
         self.original_x_shape = x.shape
+        
+        # original x's dimension is more than after x's dimension
+        # after 'x' is 2 dimension
+        # this process is normalized to 2 dimension 
         x = x.reshape(x.shape[0], -1)
         self.x = x
 
+        # out.shape, (batch_size, output_neuron_size)
         out = np.dot(self.x, self.W) + self.b
 
         return out
 
     def backward(self, dout):
+        # I * W = O, O * W.T = I
+        # new dx, dW, db are renewed by output & original bias, weight, input
+        # 3 dimension, (row, column, depth)
+        # np.sum(axis=0) = (column, depth), (axis=1) = (row, depth), (axis=2) = (row, column)
         dx = np.dot(dout, self.W.T)
         self.dW = np.dot(self.x.T, dout)
         self.db = np.sum(dout, axis=0)
+        
         
         dx = dx.reshape(*self.original_x_shape)  # 입력 데이터 모양 변경(텐서 대응)
         return dx
